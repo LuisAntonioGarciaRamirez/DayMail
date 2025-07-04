@@ -1,0 +1,21 @@
+﻿@* NavMenu.razor *@
+<div class="sidebar @(isOpen ? "open" : "")">
+    <button class="toggle-btn" @onclick="ToggleSidebar">☰</button>
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/nosotros">Nosotros</a></li>
+            <li><a href="/servicios">Servicios</a></li>
+            <li><a href="/herramientas">Herramientas</a></li>
+        </ul>
+    </nav>
+</div>
+
+@code {
+    private bool isOpen = false;
+
+    private void ToggleSidebar()
+    {
+        isOpen = !isOpen;
+    }
+}

@@ -1,0 +1,18 @@
+﻿@inherits LayoutComponentBase
+
+<NavMenu />
+
+<div class="main-content">
+    @Body
+</div>
+
+<style>
+    .main-content {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+    }
+
+    .sidebar.open ~ .main-content {
+        margin-left: 240px; /* mismo ancho */
+    }
+</style>

@@ -1,0 +1,67 @@
+/* Sidebar base con paleta */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100%;
+    background: #1D3557; /* Azul petróleo */
+    color: #FFFFFF; /* Blanco */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    padding-top: 2rem;
+}
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+/* Botón toggle */
+.toggle-btn {
+    position: absolute;
+    top: 1rem;
+    right: 50px;
+    background: #E76F51; /* Terracota */
+    color: #FFFFFF;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    font-size: 1.2rem;
+}
+
+.sidebar.open .toggle-btn {
+    right: 50px; /* Mueve el botón fuera de la vista cuando la barra está abierta */
+}
+
+/* Enlaces */
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav li {
+    margin: 1rem 0;
+}
+
+.sidebar nav a {
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    display: block;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+    .sidebar nav a:hover {
+        background: #2A9D8F; /* Turquesa como hover dinámico */
+        border-left: 4px solid #E76F51; /* Terracota acento */
+    }
+
+/* Responsive extra opcional */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+}

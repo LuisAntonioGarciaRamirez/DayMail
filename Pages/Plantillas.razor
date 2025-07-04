@@ -1,0 +1,22 @@
+﻿@page "/Plantillas"
+@using DayMail.Components
+@using DayMail.Shared.Models
+
+<h1>Editor de Plantillas DayMail</h1>
+
+<Toolbox OnAdd="AddElement" />
+<Canvas Elements="@Elements" />
+
+@code {
+    private List<TemplateElement> Elements = new();
+
+    void AddElement(string type)
+    {
+        var nuevo = new TemplateElement
+        {
+            Type = type,
+            Content = type == "Image" ? "/img/placeholder.png" : $"Nuevo {type}"
+        };
+        Elements.Add(nuevo);
+    }
+}

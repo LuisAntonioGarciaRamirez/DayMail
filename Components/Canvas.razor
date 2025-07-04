@@ -1,0 +1,45 @@
+@using DayMail.Shared.Models
+@namespace DayMail.Components
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+<!-- Components/Canvas.razor -->
+<div class="canvas" @ref="canvasRef">
+    @foreach (var element in Elements)
+    {
+        <div class="canvas-item"
+             style="left:@element.Xpx; top:@element.Ypx; position:absolute; width:@element.WidthPx; height:@element.HeightPx;"
+             @onmousedown="e => StartDrag(e, element)">
+            @if (element.Type == "Text")
+            {
+                <p>@element.Content</p>
+            }
+            else if (element.Type == "Image")
+            {
+                <img src="@element.Content" style="max-width:100%; max-height:100%;" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public List<TemplateElement> Elements { get; set; } = new();
+
+    private IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "/js/drag.js");
+            await module.InvokeVoidAsync("canvasDrag.initialize", "canvas");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+}

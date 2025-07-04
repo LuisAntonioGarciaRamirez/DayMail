@@ -1,0 +1,10 @@
+<!-- Components/Toolbox.razor -->
+<div class="toolbox">
+    <button @onclick="() => OnAdd.InvokeAsync("Text")">Texto</button>
+    <button @onclick="() => OnAdd.InvokeAsync("Image")">Imagen</button>
+    <button @onclick="() => OnAdd.InvokeAsync("Button")">Botón</button>
+</div>
+
+@code {
+    [Parameter] public EventCallback<string> OnAdd { get; set; }
+}

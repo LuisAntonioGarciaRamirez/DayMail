@@ -1,0 +1,107 @@
+@page "/campañas"
+@using System.ComponentModel.DataAnnotations
+
+<h2>Crear nueva campaña</h2>
+
+<EditForm Model="modelo" OnValidSubmit="GuardarCampaña">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Nombre de la campaña</label>
+        <InputText @bind-Value="modelo.Nombre" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Asunto del correo</label>
+        <InputText @bind-Value="modelo.Asunto" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Cuerpo del mensaje</label>
+        <InputTextArea @bind-Value="modelo.Cuerpo" class="form-control" Rows="6" />
+    </div>
+
+    <div class="mb-3">
+        <label>Fecha de inicio</label>
+        <InputDate @bind-Value="modelo.FechaInicio" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Hora de envío</label>
+        <input type="time"
+               class="form-control"
+               value="@modelo.HoraEnvio.ToString(@"hh\:mm")"
+               @onchange="OnHoraChanged" />
+    </div>
+
+    <div class="mb-3">
+        <label>Duración (días)</label>
+        <InputNumber @bind-Value="modelo.DuracionDias" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Archivo CSV de destinatarios</label>
+        <InputFile OnChange="CargarArchivo" />
+        @if (!string.IsNullOrEmpty(nombreArchivo))
+        {
+            <div class="text-success mt-2">Archivo cargado: @nombreArchivo</div>
+        }
+    </div>
+
+    <button class="btn btn-success" type="submit">Guardar campaña</button>
+</EditForm>
+
+@if (campañas.Count > 0)
+{
+    <h4 class="mt-5">Campañas registradas</h4>
+    <ul class="list-group">
+        @foreach (var c in campañas)
+        {
+            <li class="list-group-item">
+                <strong>@c.Nombre</strong> - @c.Asunto |
+                @c.FechaInicio.ToShortDateString() @c.HoraEnvio.ToString(@"hh\:mm")
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private CampañaModel modelo = new();
+    private List<CampañaModel> campañas = new();
+    private string nombreArchivo = "";
+
+    private void GuardarCampaña()
+    {
+        campañas.Add(modelo);
+        modelo = new();
+        nombreArchivo = "";
+    }
+
+    private void CargarArchivo(InputFileChangeEventArgs e)
+    {
+        var archivo = e.File;
+        nombreArchivo = archivo.Name;
+        // Aquí podrías procesar el archivo si lo deseas
+    }
+
+    private void OnHoraChanged(ChangeEventArgs e)
+    {
+        if (TimeSpan.TryParse(e.Value?.ToString(), out var hora))
+        {
+            modelo.HoraEnvio = hora;
+        }
+    }
+
+    public class CampañaModel
+    {
+        [Required] public string Nombre { get; set; } = string.Empty;
+        [Required] public string Asunto { get; set; } = string.Empty;
+        [Required] public string Cuerpo { get; set; } = string.Empty;
+        [Required] public DateTime FechaInicio { get; set; } = DateTime.Today;
+        [Required] public TimeSpan HoraEnvio { get; set; } = new(9, 0, 0); // 09:00 AM por default
+
+        [Range(1, 30, ErrorMessage = "La duración debe ser entre 1 y 30 días")]
+        public int DuracionDias { get; set; } = 1;
+    }
+}
